@@ -1,0 +1,298 @@
+MySQL project
+
+----------------------------------------------------------
+
+CREATE SCHEMA `mysql-project` ;
+
+
+// CREATE TABLES AND COLUMNS //
+
+
+
+// STUDENTS
+
+
+CREATE TABLE `mysql-project`.`students` (
+  `students_id` INT NOT NULL AUTO_INCREMENT,
+  `students_first_name` VARCHAR(45) NOT NULL,
+  `students_last_name` VARCHAR(45) NOT NULL,
+  `subject_one` INT NOT NULL,
+  `subject_two` INT NOT NULL,
+  PRIMARY KEY (`students_id`),
+  UNIQUE INDEX `students_id_UNIQUE` (`students_id` ASC) VISIBLE);
+
+
+// COURSES
+
+CREATE TABLE `mysql-project`.`courses` (
+  `subject_id` INT NOT NULL AUTO_INCREMENT,
+  `subjects` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`subject_id`),
+  UNIQUE INDEX `subject_id_UNIQUE` (`subject_id` ASC) VISIBLE);
+
+
+// TEACHERS
+
+CREATE TABLE `mysql-project`.`teachers` (
+  `teachers_id` INT NOT NULL AUTO_INCREMENT,
+  `teachers_first_name` VARCHAR(45) NOT NULL,
+  `teachers_last_name` VARCHAR(45) NOT NULL,
+  `teachers_subject_teach` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`teachers_id`),
+  UNIQUE INDEX `teachers_id_UNIQUE` (`teachers_id` ASC) VISIBLE);
+
+--modification--
+
+ALTER TABLE `mysql-project`.`teachers` 
+CHANGE COLUMN `teachers_subject_teach` `teachers_subject_teach` VARCHAR(45) NOT NULL ;
+
+
+// GRADES
+
+CREATE TABLE `mysql-project`.`grades` (
+  `grade_id` INT NOT NULL AUTO_INCREMENT,
+  `teacher_id` INT NOT NULL,
+  `subject_id` INT NOT NULL,
+  `grade` INT NOT NULL,
+  `student_id` INT NOT NULL,
+  PRIMARY KEY (`grade_id`),
+  UNIQUE INDEX `grade_id_UNIQUE` (`grade_id` ASC) VISIBLE);
+
+
+// FOREIGN KEYS
+
+
+* STUDENTS
+
+
+ALTER TABLE `mysql-project`.`students` 
+ADD CONSTRAINT `students_courses_one_id`
+  FOREIGN KEY (`subject_one`)
+  REFERENCES `mysql-project`.`courses` (`subject_id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `students_courses_two_id`
+  FOREIGN KEY (`subject_two`)
+  REFERENCES `mysql-project`.`courses` (`subject_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+* GRADES
+
+
+ALTER TABLE `mysql-project`.`grades` 
+ADD INDEX `student_id_idx` (`student_id` ASC) VISIBLE,
+ADD INDEX `subject_id_idx` (`subject_id` ASC) VISIBLE,
+ADD INDEX `teacher_id_idx` (`teacher_id` ASC) VISIBLE;
+;
+ALTER TABLE `mysql-project`.`grades` 
+ADD CONSTRAINT `student_id`
+  FOREIGN KEY (`student_id`)
+  REFERENCES `mysql-project`.`students` (`students_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `subject_id`
+  FOREIGN KEY (`subject_id`)
+  REFERENCES `mysql-project`.`courses` (`subject_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `teacher_id`
+  FOREIGN KEY (`teacher_id`)
+  REFERENCES `mysql-project`.`teachers` (`teachers_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+
+// DATA
+
+
+* STUDENTS
+
+INSERT INTO students(`students_first_name`,`students_last_name`, `subject_one`, `subject_two`)
+VALUE ("Juan", "Palomo", "2", "6");
+
+INSERT INTO students(`students_first_name`,`students_last_name`, `subject_one`, `subject_two`)
+VALUE ("Victor", "Fernandez", "5", "3");
+
+INSERT INTO students(`students_first_name`,`students_last_name`, `subject_one`, `subject_two`)
+VALUE ("Jon", "Williams", "1", "3");
+
+INSERT INTO students(`students_first_name`,`students_last_name`, `subject_one`, `subject_two`)
+VALUE ("Pedro", "Picapiedra", "6", "1");
+
+INSERT INTO students(`students_first_name`,`students_last_name`, `subject_one`, `subject_two`)
+VALUE ("Jose", "Tomillo", "2", "3");
+
+INSERT INTO students(`students_first_name`,`students_last_name`, `subject_one`, `subject_two`)
+VALUE ("Richard", "Fountain", "5", "4");
+
+INSERT INTO students(`students_first_name`,`students_last_name`, `subject_one`, `subject_two`)
+VALUE ("James", "Johnson", "2", "3");
+
+INSERT INTO students(`students_first_name`,`students_last_name`, `subject_one`, `subject_two`)
+VALUE ("Arnau", "Esquerre", "4", "3");
+
+INSERT INTO students(`students_first_name`,`students_last_name`, `subject_one`, `subject_two`)
+VALUE ("Francisco", "Menisco", "6", "1");
+
+INSERT INTO students(`students_first_name`,`students_last_name`, `subject_one`, `subject_two`)
+VALUE ("Hans", "Zimmer", "5", "2");
+
+
+
+* COURSES 
+
+
+INSERT INTO courses(`subjects`)
+VALUE ("history");
+
+INSERT INTO courses(`subjects`)
+VALUE ("math");
+
+INSERT INTO courses(`subjects`)
+VALUE ("geography");
+
+INSERT INTO courses(`subjects`)
+VALUE ("science");
+
+INSERT INTO courses(`subjects`)
+VALUE ("lenguage");
+
+INSERT INTO courses(`subjects`)
+VALUE ("development");
+
+
+* TEACHERS
+
+INSERT INTO teachers(`teachers_first_name`,`teachers_last_name`,`teachers_subject_teach`)
+VALUE ("Juan","Garcia","history");
+
+INSERT INTO teachers(`teachers_first_name`,`teachers_last_name`,`teachers_subject_teach`)
+VALUE ("Roberto","Lopez","math");
+
+INSERT INTO teachers(`teachers_first_name`,`teachers_last_name`,`teachers_subject_teach`)
+VALUE ("Will","Smith","geography");
+
+INSERT INTO teachers(`teachers_first_name`,`teachers_last_name`,`teachers_subject_teach`)
+VALUE ("Carla","Asencio","science");
+
+INSERT INTO teachers(`teachers_first_name`,`teachers_last_name`,`teachers_subject_teach`)
+VALUE ("Eva","Gilbert","lenguage");
+
+INSERT INTO teachers(`teachers_first_name`,`teachers_last_name`,`teachers_subject_teach`)
+VALUE ("Carles","Bellspi","development");
+
+
+* GRADES
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("1","1","6","3");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("1","1","8","4");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("1","1","5","9");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("2","2","6","1");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("2","2","4","5");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("2","2","10","7");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("2","2","7","10");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("3","3","7","2");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("3","3","5","3");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("3","3","2","5");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("3","3","6","7");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("3","3","10","8");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("4","4","6","6");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("4","4","10","8");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("5","5","7","2");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("5","5","4","6");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("5","5","8","10");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("6","6","9","1");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("6","6","5","4");
+
+INSERT INTO grades(`teacher_id`,`subject_id`,`grade`,`student_id`)
+VALUE ("6","6","1","9");
+
+
+
+----> EXERCISE 1: The average grade that is given by each professor
+
+SELECT (select avg(grade) from grades where grades.teacher_id = teachers.teachers_id) AS average, teachers_first_name
+FROM grades
+JOIN teachers
+ON grades.teacher_id = teachers.teachers_id
+group by teachers.teachers_first_name;
+
+----> EXERCISE 2 : The top grades for each student
+
+SELECT students_first_name, (select max(grade) from grades where grades.student_id = students.students_id) AS top_grade
+FROM grades
+JOIN students
+ON grades.student_id = students.students_id
+group by students_first_name;
+
+----> EXERCISE 3 : Group students by the courses that they are enrolled in
+
+SELECT subjects,
+(SELECT GROUP_CONCAT(students_first_name) FROM students WHERE students.subject_one = courses.subject_id
+OR students.subject_two = courses.subject_id GROUP BY subjects) AS students
+FROM students
+RIGHT JOIN courses
+ON students.subject_one = courses.subject_id
+OR students.subject_two = courses.subject_id
+GROUP BY subjects;
+
+----> EXERCISE 4 : Create a summary report of courses and their average grades, sorted by the most challenging course (course with the lowest average grade) to the easiest course
+
+SELECT subjects, (SELECT avg(grade) FROM grades WHERE courses.subject_id = grades.subject_id) AS average
+FROM courses
+JOIN grades
+ON courses.subject_id = grades.subject_id
+GROUP BY subjects
+ORDER BY average ASC;
+
+----> EXERCISE 5 : Finding which student and professor have the most courses in common
+
+*All have the same in common.
+
+SELECT teachers_first_name, subjects, students_first_name
+FROM courses c
+INNER JOIN teachers t
+ON t.teachers_id = c.subject_id
+INNER JOIN students s
+ON s.subject_one = c.subject_id
+OR s.subject_two = c.subject_id;
